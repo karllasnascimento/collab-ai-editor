@@ -2,7 +2,7 @@ import { Editor } from './Editor.jsx'
 import { Preview } from './Preview.jsx'
 import { ChatPanel } from './ChatPanel.jsx'
 
-export function Layout({ content, onContentChange }) {
+export function Layout({ content, onContentChange, onSend, loading, error }) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
@@ -38,9 +38,7 @@ export function Layout({ content, onContentChange }) {
           {/* Bottom right — Chat */}
           <div className="flex flex-col h-72 shrink-0">
             <PanelLabel>Chat</PanelLabel>
-            <div className="flex-1 overflow-auto p-4 text-sm text-gray-600">
-              AI chat panel will go here
-            </div>
+            <ChatPanel onSend={onSend} loading={loading} error={error} />
           </div>
 
         </div>
