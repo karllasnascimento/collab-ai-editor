@@ -4,68 +4,58 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**collab-ai-editor** — a collaborative AI-powered editor (early stage, no source files yet).
+A collaborative Markdown editor where an AI agent suggests edits, shows diffs, and iterates on documents alongside the user.
 
-# collab-ai-editor
+## Commands
 
-A collaborative Markdown editor where an AI agent suggests edits, 
-shows diffs, and iterates on documents alongside the user.
+```bash
+npm run dev      # start Vite dev server
+npm run build    # production build
+npm run preview  # preview production build
+```
+
+> Add lint/test commands here once configured.
 
 ## Stack
+
 - React + Vite (JavaScript, not TypeScript)
 - CodeMirror 6 for the Markdown editor
 - react-markdown + remark-gfm for the preview pane
 - diff (npm) for client-side diff computation
 - Tailwind CSS for styling
-- OpenRouter API for AI calls
+- OpenRouter API for AI calls (`VITE_OPENROUTER_API_KEY` in `.env`)
 
-## Architecture decisions
-- AI always returns the full updated document — never a patch
-- Diffs are computed client-side using the diff library
-- System prompt lives in src/prompts/system.js — keep it visible and editable
-- API key stored in .env as VITE_OPENROUTER_API_KEY
-- useDocument hook owns document state — knows nothing about AI
-- useAIChat hook owns API calls and conversation history
-- openrouter.js is the only file that touches the network
+## Architecture
 
-## Folder structure
-src/
-  components/
-    Editor.jsx
-    Preview.jsx
-    DiffView.jsx
-    ChatPanel.jsx
-    Layout.jsx
-  hooks/
-    useDocument.js
-    useAIChat.js
-  services/
-    openrouter.js
-  utils/
-    diff.js
-  prompts/
-    system.js
-  App.jsx
+State is split across two hooks that never cross concerns:
 
-## Skills (AI quick actions)
-The ChatPanel should include skill buttons as shortcuts:
+- `useDocument` — owns the document string; knows nothing about AI
+- `useAIChat` — owns API calls and conversation history
+
+`src/services/openrouter.js` is the **only** file that touches the network. The AI always returns the **full updated document** (never a patch); diffs are computed client-side in `src/utils/diff.js`.
+
+The system prompt lives in `src/prompts/system.js` — keep it visible and editable.
+
+## ChatPanel skills (quick-action buttons)
+
 - Improve writing
 - Make it shorter
 - Fix grammar
 - Change tone to formal
 - Add a conclusion
 
-## Do not
-- Use TypeScript
-- Add auth or multi-user features
-- Add Docker or any backend infrastructure
-- Use localStorage for persistence
-- Add mobile responsiveness
-- Customize CodeMirror heavily — default config is enough
-- Stream responses — buffer the full response before diffing
+## Constraints
+
+- No TypeScript
+- No auth or multi-user features
+- No backend / Docker
+- No localStorage persistence
+- No mobile responsiveness
+- Minimal CodeMirror customization — default config is enough
+- No streaming — buffer the full response before diffing
 
 ## Code style
-- Functional components only
-- Named exports for components
+
+- Functional components, named exports
 - Clear prop names — no abbreviations
-- Error states always handled — never a blank screen on failure
+- Always handle error states — never a blank screen on failure
