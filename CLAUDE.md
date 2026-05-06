@@ -36,6 +36,27 @@ State is split across two hooks that never cross concerns:
 
 The system prompt lives in `src/prompts/system.js` — keep it visible and editable.
 
+## Folder structure
+
+src/
+  components/
+    Editor.jsx        # CodeMirror wrapper
+    Preview.jsx       # Markdown rendered preview
+    DiffView.jsx      # Shows proposed changes with accept/reject
+    ChatPanel.jsx     # AI conversation UI + skill buttons
+    Layout.jsx        # Split-pane shell
+  hooks/
+    useDocument.js    # Document state, proposal, accept/reject
+    useAIChat.js      # API calls, conversation history, loading/error
+  services/
+    openrouter.js     # Only file that touches the network
+  utils/
+    diff.js           # Diff computation and formatting
+  prompts/
+    system.js         # System prompt as exported string
+  App.jsx
+
+
 ## ChatPanel skills (quick-action buttons)
 
 - Improve writing
