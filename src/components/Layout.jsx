@@ -1,4 +1,8 @@
-export function Layout() {
+import { Editor } from './Editor.jsx'
+import { Preview } from './Preview.jsx'
+import { ChatPanel } from './ChatPanel.jsx'
+
+export function Layout({ content, onContentChange }) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
@@ -13,10 +17,10 @@ export function Layout() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Left — Editor */}
-        <div className="flex flex-col w-1/2 border-r border-gray-800">
+        <div className="flex flex-col w-1/2 border-r border-gray-800 overflow-hidden">
           <PanelLabel>Editor</PanelLabel>
-          <div className="flex-1 overflow-auto p-4 text-sm text-gray-600">
-            Markdown editor will go here
+          <div className="flex-1 overflow-hidden">
+            <Editor content={content} onChange={onContentChange} />
           </div>
         </div>
 
@@ -26,8 +30,8 @@ export function Layout() {
           {/* Top right — Preview */}
           <div className="flex flex-col flex-1 overflow-hidden border-b border-gray-800">
             <PanelLabel>Preview</PanelLabel>
-            <div className="flex-1 overflow-auto p-4 text-sm text-gray-600">
-              Rendered Markdown preview will go here
+            <div className="flex-1 overflow-auto p-4">
+              <Preview content={content} />
             </div>
           </div>
 

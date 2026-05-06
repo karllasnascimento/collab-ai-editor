@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+.markdown-preview h1 { @apply text-2xl font-bold mt-0 mb-4 text-gray-100; }
+.markdown-preview h2 { @apply text-xl font-semibold mt-5 mb-3 text-gray-100; }
+.markdown-preview h3 { @apply text-lg font-medium mt-4 mb-2 text-gray-200; }
+.markdown-preview p  { @apply mb-3 leading-relaxed text-gray-300; }
+.markdown-preview ul { @apply list-disc list-outside pl-5 mb-3 text-gray-300; }
+.markdown-preview ol { @apply list-decimal list-outside pl-5 mb-3 text-gray-300; }
+.markdown-preview li { @apply mb-1; }
+.markdown-preview strong { @apply font-semibold text-gray-100; }
+.markdown-preview em    { @apply italic text-gray-300; }
+.markdown-preview a     { @apply text-blue-400 underline hover:text-blue-300; }
+.markdown-preview code  { @apply font-mono text-xs bg-gray-800 text-emerald-300 px-1.5 py-0.5 rounded; }
+.markdown-preview pre   { @apply bg-gray-800 rounded-lg p-4 mb-4 overflow-auto; }
+.markdown-preview pre code { @apply bg-transparent p-0 text-gray-200; }
+.markdown-preview blockquote { @apply border-l-2 border-gray-600 pl-4 italic text-gray-400 mb-3; }
+.markdown-preview hr  { @apply border-gray-700 my-4; }
+.markdown-preview table { @apply w-full mb-4 text-sm; }
+.markdown-preview th { @apply text-left font-medium text-gray-300 pb-2 pr-4 border-b border-gray-700; }
+.markdown-preview td { @apply py-2 pr-4 text-gray-400 border-b border-gray-800; }
