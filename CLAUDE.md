@@ -38,6 +38,7 @@ The system prompt lives in `src/prompts/system.js` — keep it visible and edita
 
 ## Folder structure
 
+```
 src/
   components/
     Editor.jsx        # CodeMirror wrapper
@@ -55,7 +56,7 @@ src/
   prompts/
     system.js         # System prompt as exported string
   App.jsx
-
+``` 
 
 ## ChatPanel skills (quick-action buttons)
 
