@@ -34,25 +34,37 @@ export function estimateCost(usage, model) {
 
 export async function sendMessage(messages, instruction) {
   const model = selectModel(instruction)
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 30_000)
 
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ model: model.id, messages }),
-  })
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ model: model.id, messages }),
+      signal: controller.signal,
+    })
 
-  if (!response.ok) {
-    const body = await response.json().catch(() => ({}))
-    throw new Error(body.error?.message ?? `OpenRouter error ${response.status}`)
-  }
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}))
+      throw new Error(body.error?.message ?? `OpenRouter error ${response.status}`)
+    }
 
-  const data = await response.json()
-  return {
-    content: data.choices[0].message.content,
-    usage: data.usage ?? null,
-    model,
+    const data = await response.json()
+    return {
+      content: data.choices[0].message.content,
+      usage: data.usage ?? null,
+      model,
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error('Request timed out. Please try again.')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
