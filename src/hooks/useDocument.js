@@ -13,6 +13,16 @@ Start typing here, or ask the AI to help you write.
 
 export function useDocument() {
   const [content, setContent] = useState(INITIAL_CONTENT)
+  const [proposal, setProposal] = useState(null)
 
-  return { content, setContent }
+  function applyProposal() {
+    setContent(proposal)
+    setProposal(null)
+  }
+
+  function clearProposal() {
+    setProposal(null)
+  }
+
+  return { content, setContent, proposal, setProposal, applyProposal, clearProposal }
 }

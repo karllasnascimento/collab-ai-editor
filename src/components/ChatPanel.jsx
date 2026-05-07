@@ -1,17 +1,23 @@
 import { useState } from 'react'
 
-export function ChatPanel({ onSend, loading, error }) {
+export function ChatPanel({ onSend, loading, error, disabled }) {
   const [input, setInput] = useState('')
+  const isDisabled = loading || disabled
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (!input.trim() || loading) return
+    if (!input.trim() || isDisabled) return
     onSend(input.trim())
     setInput('')
   }
 
   return (
     <div className="flex flex-col h-full">
+      {disabled && (
+        <div className="shrink-0 px-3 py-2 text-xs text-amber-400 bg-amber-950/30 border-b border-amber-900">
+          Accept or reject the current suggestion first.
+        </div>
+      )}
       {error && (
         <div className="shrink-0 px-3 py-2 text-xs text-red-400 bg-red-950/30 border-b border-red-900">
           {error}
@@ -31,12 +37,12 @@ export function ChatPanel({ onSend, loading, error }) {
           value={input}
           onChange={e => setInput(e.target.value)}
           placeholder="Describe what to change…"
-          disabled={loading}
+          disabled={isDisabled}
           className="flex-1 bg-gray-900 text-gray-200 text-sm px-3 py-1.5 rounded border border-gray-700 placeholder-gray-600 focus:outline-none focus:border-gray-500 disabled:opacity-50"
         />
         <button
           type="submit"
-          disabled={!input.trim() || loading}
+          disabled={!input.trim() || isDisabled}
           className="px-3 py-1.5 text-sm rounded bg-gray-700 text-gray-200 hover:bg-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading ? '…' : 'Send'}

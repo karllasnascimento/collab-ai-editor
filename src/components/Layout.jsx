@@ -1,8 +1,9 @@
 import { Editor } from './Editor.jsx'
 import { Preview } from './Preview.jsx'
+import { DiffView } from './DiffView.jsx'
 import { ChatPanel } from './ChatPanel.jsx'
 
-export function Layout({ content, onContentChange, onSend, loading, error }) {
+export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, loading, error }) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
@@ -24,21 +25,40 @@ export function Layout({ content, onContentChange, onSend, loading, error }) {
           </div>
         </div>
 
-        {/* Right column — Preview + Chat stacked */}
+        {/* Right column — Preview/Diff + Chat stacked */}
         <div className="flex flex-col w-1/2">
 
-          {/* Top right — Preview */}
+          {/* Top right — Preview or DiffView */}
           <div className="flex flex-col flex-1 overflow-hidden border-b border-gray-800">
-            <PanelLabel>Preview</PanelLabel>
-            <div className="flex-1 overflow-auto p-4">
-              <Preview content={content} />
-            </div>
+            {proposal ? (
+              <>
+                <PanelLabel highlight>Proposed changes</PanelLabel>
+                <DiffView
+                  original={content}
+                  proposal={proposal}
+                  onAccept={onAccept}
+                  onReject={onReject}
+                />
+              </>
+            ) : (
+              <>
+                <PanelLabel>Preview</PanelLabel>
+                <div className="flex-1 overflow-auto p-4">
+                  <Preview content={content} />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Bottom right — Chat */}
           <div className="flex flex-col h-72 shrink-0">
             <PanelLabel>Chat</PanelLabel>
-            <ChatPanel onSend={onSend} loading={loading} error={error} />
+            <ChatPanel
+              onSend={onSend}
+              loading={loading}
+              error={error}
+              disabled={!!proposal}
+            />
           </div>
 
         </div>
@@ -47,9 +67,13 @@ export function Layout({ content, onContentChange, onSend, loading, error }) {
   )
 }
 
-function PanelLabel({ children }) {
+function PanelLabel({ children, highlight }) {
   return (
-    <div className="shrink-0 px-3 py-1.5 text-xs font-medium text-gray-500 border-b border-gray-800 bg-gray-900">
+    <div className={`shrink-0 px-3 py-1.5 text-xs font-medium border-b border-gray-800 ${
+      highlight
+        ? 'text-amber-400 bg-amber-950/20'
+        : 'text-gray-500 bg-gray-900'
+    }`}>
       {children}
     </div>
   )
