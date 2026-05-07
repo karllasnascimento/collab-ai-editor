@@ -1,25 +1,47 @@
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-const MODEL = 'anthropic/claude-haiku-4-5'
 
-// claude-haiku-4-5 pricing on OpenRouter (USD per token)
-const PRICING = {
-  input:  0.80 / 1_000_000,
-  output: 4.00 / 1_000_000,
+const MODELS = {
+  haiku: {
+    id: 'anthropic/claude-haiku-4-5',
+    label: 'haiku',
+    pricing: { input: 0.80 / 1_000_000, output: 4.00 / 1_000_000 },
+  },
+  sonnet: {
+    id: 'anthropic/claude-sonnet-4-5',
+    label: 'sonnet',
+    pricing: { input: 3.00 / 1_000_000, output: 15.00 / 1_000_000 },
+  },
 }
 
-export function estimateCost(usage) {
-  if (!usage) return null
-  return usage.prompt_tokens * PRICING.input + usage.completion_tokens * PRICING.output
+// Instructions simple enough for Haiku — everything else uses Sonnet
+const SIMPLE_TASKS = new Set([
+  'Fix grammar',
+  'Make it shorter',
+  'Change tone to formal',
+])
+
+function selectModel(instruction) {
+  return SIMPLE_TASKS.has(instruction) ? MODELS.haiku : MODELS.sonnet
 }
 
-export async function sendMessage(messages) {
+export function estimateCost(usage, model) {
+  if (!usage || !model) return null
+  return (
+    usage.prompt_tokens * model.pricing.input +
+    usage.completion_tokens * model.pricing.output
+  )
+}
+
+export async function sendMessage(messages, instruction) {
+  const model = selectModel(instruction)
+
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ model: MODEL, messages }),
+    body: JSON.stringify({ model: model.id, messages }),
   })
 
   if (!response.ok) {
@@ -31,5 +53,6 @@ export async function sendMessage(messages) {
   return {
     content: data.choices[0].message.content,
     usage: data.usage ?? null,
+    model,
   }
 }

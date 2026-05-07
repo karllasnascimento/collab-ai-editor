@@ -77,7 +77,7 @@ export function ChatPanel({ onSend, messages, loading, error, onClearError, disa
                   </div>
                   {msg.tokens != null && (
                     <span className="text-xs text-gray-700">
-                      {msg.tokens.toLocaleString()} tokens · {formatCost(msg.cost)}
+                      {msg.tokens.toLocaleString()} tokens · {formatCost(msg.cost)}{msg.model ? ` · ${msg.model}` : ''}
                     </span>
                   )}
                 </div>

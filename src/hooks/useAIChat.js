@@ -21,17 +21,18 @@ export function useAIChat() {
     setError(null)
 
     try {
-      const { content: reply, usage } = await sendMessage([
+      const { content: reply, usage, model } = await sendMessage([
         { role: 'system', content: systemPrompt },
         ...history,
         userMessage,
-      ])
+      ], instruction)
       setHistory(prev => [...prev, userMessage, { role: 'assistant', content: reply }])
       setMessages(prev => [...prev, {
         role: 'assistant',
         text: AI_CONFIRMATION,
         tokens: usage?.total_tokens ?? null,
-        cost: estimateCost(usage),
+        cost: estimateCost(usage, model),
+        model: model?.label ?? null,
       }])
       return reply
     } catch (err) {
