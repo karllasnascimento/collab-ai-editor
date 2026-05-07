@@ -6,7 +6,7 @@ export function DiffView({ original, proposal, onAccept, onReject }) {
 
   if (!hasChanges) {
     return (
-      <div className="flex flex-col h-full items-center justify-center gap-4 p-4">
+      <div className="flex flex-col flex-1 min-h-0 items-center justify-center gap-4 p-4">
         <p className="text-sm text-gray-500">No changes suggested.</p>
         <button
           onClick={onReject}
@@ -19,7 +19,7 @@ export function DiffView({ original, proposal, onAccept, onReject }) {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col flex-1 min-h-0">
       <div className="flex-1 overflow-auto p-3">
         <pre className="font-mono text-xs leading-5 whitespace-pre-wrap">
           {parts.map((part, partIndex) => {
