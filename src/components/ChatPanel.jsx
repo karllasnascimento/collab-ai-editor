@@ -14,9 +14,9 @@ const SKILLS = [
   'Add a conclusion',
 ]
 
-export function ChatPanel({ onSend, messages, loading, error, onClearError, disabled }) {
+export function ChatPanel({ onSend, messages, loading, error, onClearError, disabled, budgetExceeded }) {
   const [input, setInput] = useState('')
-  const isDisabled = loading || disabled
+  const isDisabled = loading || disabled || budgetExceeded
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -32,7 +32,12 @@ export function ChatPanel({ onSend, messages, loading, error, onClearError, disa
 
   return (
     <div className="flex flex-col h-full">
-      {disabled && (
+      {budgetExceeded && (
+        <div className="shrink-0 px-3 py-2 text-xs text-red-400 bg-red-950/30 border-b border-red-900">
+          Session budget limit reached. Refresh the page to start a new session.
+        </div>
+      )}
+      {!budgetExceeded && disabled && (
         <div className="shrink-0 px-3 py-2 text-xs text-amber-400 bg-amber-950/30 border-b border-amber-900">
           Accept or reject the current suggestion first.
         </div>

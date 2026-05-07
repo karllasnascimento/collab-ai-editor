@@ -4,7 +4,7 @@ import { Layout } from './components/Layout.jsx'
 
 export default function App() {
   const { content, setContent, proposal, setProposal, applyProposal, clearProposal } = useDocument()
-  const { send, messages, loading, error, clearError } = useAIChat()
+  const { send, messages, loading, error, clearError, sessionCost, requestCount, budgetExceeded } = useAIChat()
 
   async function handleSend(instruction) {
     const result = await send(instruction, content)
@@ -23,6 +23,9 @@ export default function App() {
       loading={loading}
       error={error}
       onClearError={clearError}
+      sessionCost={sessionCost}
+      requestCount={requestCount}
+      budgetExceeded={budgetExceeded}
     />
   )
 }

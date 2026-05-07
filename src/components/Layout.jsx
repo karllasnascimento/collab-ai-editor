@@ -3,15 +3,25 @@ import { Preview } from './Preview.jsx'
 import { DiffView } from './DiffView.jsx'
 import { ChatPanel } from './ChatPanel.jsx'
 
-export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, messages, loading, error, onClearError }) {
+export function Layout({
+  content, onContentChange,
+  proposal, onAccept, onReject,
+  onSend, messages, loading, error, onClearError,
+  sessionCost, requestCount, budgetExceeded,
+}) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
       {/* Header */}
-      <header className="shrink-0 flex items-center px-4 h-11 border-b border-gray-800">
+      <header className="shrink-0 flex items-center justify-between px-4 h-11 border-b border-gray-800">
         <span className="text-sm font-semibold tracking-tight text-gray-200">
           Collab AI Editor
         </span>
+        {requestCount > 0 && (
+          <span className={`text-xs ${budgetExceeded ? 'text-red-400' : 'text-gray-600'}`}>
+            Session: {requestCount} req · ${sessionCost.toFixed(4)} used
+          </span>
+        )}
       </header>
 
       {/* Main panels */}
@@ -60,6 +70,7 @@ export function Layout({ content, onContentChange, proposal, onAccept, onReject,
               error={error}
               onClearError={onClearError}
               disabled={!!proposal}
+              budgetExceeded={budgetExceeded}
             />
           </div>
 
