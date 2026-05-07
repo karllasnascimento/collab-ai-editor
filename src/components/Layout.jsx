@@ -6,6 +6,7 @@ import { ChatPanel } from './ChatPanel.jsx'
 export function Layout({
   content, onContentChange,
   proposal, onAccept, onReject,
+  canUndo, onUndo,
   onSend, messages, loading, error, onClearError,
   sessionCost, requestCount, budgetExceeded,
 }) {
@@ -30,6 +31,17 @@ export function Layout({
         {/* Left — Editor */}
         <div className="flex flex-col w-1/2 border-r border-gray-800 overflow-hidden">
           <PanelLabel>Editor</PanelLabel>
+          {canUndo && (
+            <div className="shrink-0 flex items-center justify-between px-3 py-2 text-xs border-b border-gray-800 bg-gray-900">
+              <span className="text-gray-400">AI suggestion accepted.</span>
+              <button
+                onClick={onUndo}
+                className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              >
+                ↩ Undo
+              </button>
+            </div>
+          )}
           <div className="flex-1 overflow-hidden">
             <Editor content={content} onChange={onContentChange} />
           </div>

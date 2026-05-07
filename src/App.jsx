@@ -3,7 +3,7 @@ import { useAIChat } from './hooks/useAIChat.js'
 import { Layout } from './components/Layout.jsx'
 
 export default function App() {
-  const { content, setContent, proposal, setProposal, applyProposal, clearProposal } = useDocument()
+  const { content, setContent, proposal, setProposal, applyProposal, clearProposal, canUndo, undoAccept } = useDocument()
   const { send, messages, loading, error, clearError, sessionCost, requestCount, budgetExceeded } = useAIChat()
 
   async function handleSend(instruction) {
@@ -18,6 +18,8 @@ export default function App() {
       proposal={proposal}
       onAccept={applyProposal}
       onReject={clearProposal}
+      canUndo={canUndo}
+      onUndo={undoAccept}
       onSend={handleSend}
       messages={messages}
       loading={loading}

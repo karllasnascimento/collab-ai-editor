@@ -14,8 +14,10 @@ Start typing here, or ask the AI to help you write.
 export function useDocument() {
   const [content, setContent] = useState(INITIAL_CONTENT)
   const [proposal, setProposal] = useState(null)
+  const [previousContent, setPreviousContent] = useState(null)
 
   function applyProposal() {
+    setPreviousContent(content)
     setContent(proposal)
     setProposal(null)
   }
@@ -24,5 +26,18 @@ export function useDocument() {
     setProposal(null)
   }
 
-  return { content, setContent, proposal, setProposal, applyProposal, clearProposal }
+  function undoAccept() {
+    if (previousContent !== null) {
+      setContent(previousContent)
+      setPreviousContent(null)
+    }
+  }
+
+  return {
+    content, setContent,
+    proposal, setProposal,
+    applyProposal, clearProposal,
+    canUndo: previousContent !== null,
+    undoAccept,
+  }
 }
