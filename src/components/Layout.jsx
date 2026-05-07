@@ -3,14 +3,14 @@ import { Preview } from './Preview.jsx'
 import { DiffView } from './DiffView.jsx'
 import { ChatPanel } from './ChatPanel.jsx'
 
-export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, loading, error }) {
+export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, loading, error, onClearError }) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
       {/* Header */}
       <header className="shrink-0 flex items-center px-4 h-11 border-b border-gray-800">
         <span className="text-sm font-semibold tracking-tight text-gray-200">
-          collab-ai-editor
+          Collab AI Editor
         </span>
       </header>
 
@@ -42,7 +42,7 @@ export function Layout({ content, onContentChange, proposal, onAccept, onReject,
               </>
             ) : (
               <>
-                <PanelLabel>Preview</PanelLabel>
+                <PanelLabel hint="AI-suggested changes will appear here">Preview</PanelLabel>
                 <div className="flex-1 overflow-auto p-4">
                   <Preview content={content} />
                 </div>
@@ -57,6 +57,7 @@ export function Layout({ content, onContentChange, proposal, onAccept, onReject,
               onSend={onSend}
               loading={loading}
               error={error}
+              onClearError={onClearError}
               disabled={!!proposal}
             />
           </div>
@@ -67,14 +68,15 @@ export function Layout({ content, onContentChange, proposal, onAccept, onReject,
   )
 }
 
-function PanelLabel({ children, highlight }) {
+function PanelLabel({ children, highlight, hint }) {
   return (
-    <div className={`shrink-0 px-3 py-1.5 text-xs font-medium border-b border-gray-800 ${
+    <div className={`shrink-0 flex items-center justify-between px-3 py-1.5 text-xs font-medium border-b border-gray-800 ${
       highlight
         ? 'text-amber-400 bg-amber-950/20'
         : 'text-gray-500 bg-gray-900'
     }`}>
-      {children}
+      <span>{children}</span>
+      {hint && <span className="text-gray-700 font-normal">{hint}</span>}
     </div>
   )
 }

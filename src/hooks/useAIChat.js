@@ -32,5 +32,9 @@ export function useAIChat() {
     }
   }
 
-  return { send, history, loading, error }
+  function clearError() {
+    setError(null)
+  }
+
+  return { send, history, loading, error, clearError }
 }

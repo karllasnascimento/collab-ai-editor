@@ -8,7 +8,7 @@ const SKILLS = [
   'Add a conclusion',
 ]
 
-export function ChatPanel({ onSend, loading, error, disabled }) {
+export function ChatPanel({ onSend, loading, error, onClearError, disabled }) {
   const [input, setInput] = useState('')
   const isDisabled = loading || disabled
 
@@ -27,16 +27,34 @@ export function ChatPanel({ onSend, loading, error, disabled }) {
         </div>
       )}
       {error && (
-        <div className="shrink-0 px-3 py-2 text-xs text-red-400 bg-red-950/30 border-b border-red-900">
-          {error}
+        <div className="shrink-0 flex items-start justify-between gap-2 px-3 py-2 text-xs text-red-400 bg-red-950/30 border-b border-red-900">
+          <span>{error}</span>
+          <button
+            onClick={onClearError}
+            className="shrink-0 text-red-500 hover:text-red-300 leading-none"
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
         </div>
       )}
 
       <div className="flex-1 overflow-auto p-3 text-sm">
         {loading ? (
-          <p className="text-gray-500 italic">AI is thinking…</p>
+          <div className="flex items-center gap-2 text-gray-500 italic">
+            <svg className="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            AI is thinking…
+          </div>
         ) : (
-          <p className="text-gray-600">Send an instruction to edit your document.</p>
+          <div className="flex flex-col gap-1">
+            <p className="text-gray-300 font-medium">Ask the AI to edit your document.</p>
+            <p className="text-gray-500 text-xs">
+              Type an instruction below, or use the quick-action buttons to improve writing, fix grammar, and more.
+            </p>
+          </div>
         )}
       </div>
 
