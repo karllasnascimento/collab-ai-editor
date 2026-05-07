@@ -1,5 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 
+function formatCost(cost) {
+  if (cost == null) return ''
+  if (cost < 0.0001) return '<$0.0001'
+  return `$${cost.toFixed(4)}`
+}
+
 const SKILLS = [
   'Improve writing',
   'Make it shorter',
@@ -69,6 +75,11 @@ export function ChatPanel({ onSend, messages, loading, error, onClearError, disa
                   <div className="max-w-[85%] px-3 py-2 rounded-lg bg-gray-800 text-gray-400 italic">
                     {msg.text}
                   </div>
+                  {msg.tokens != null && (
+                    <span className="text-xs text-gray-700">
+                      {msg.tokens.toLocaleString()} tokens · {formatCost(msg.cost)}
+                    </span>
+                  )}
                 </div>
               )
             )}

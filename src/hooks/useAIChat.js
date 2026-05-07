@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { systemPrompt } from '../prompts/system.js'
-import { sendMessage } from '../services/openrouter.js'
+import { sendMessage, estimateCost } from '../services/openrouter.js'
 
 const AI_CONFIRMATION = "Here's my suggestion — review the diff above."
 
@@ -21,13 +21,18 @@ export function useAIChat() {
     setError(null)
 
     try {
-      const reply = await sendMessage([
+      const { content: reply, usage } = await sendMessage([
         { role: 'system', content: systemPrompt },
         ...history,
         userMessage,
       ])
       setHistory(prev => [...prev, userMessage, { role: 'assistant', content: reply }])
-      setMessages(prev => [...prev, { role: 'assistant', text: AI_CONFIRMATION }])
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: AI_CONFIRMATION,
+        tokens: usage?.total_tokens ?? null,
+        cost: estimateCost(usage),
+      }])
       return reply
     } catch (err) {
       setError(err.message)
