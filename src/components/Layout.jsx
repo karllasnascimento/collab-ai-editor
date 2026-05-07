@@ -3,7 +3,7 @@ import { Preview } from './Preview.jsx'
 import { DiffView } from './DiffView.jsx'
 import { ChatPanel } from './ChatPanel.jsx'
 
-export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, loading, error, onClearError }) {
+export function Layout({ content, onContentChange, proposal, onAccept, onReject, onSend, messages, loading, error, onClearError }) {
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
 
@@ -55,6 +55,7 @@ export function Layout({ content, onContentChange, proposal, onAccept, onReject,
             <PanelLabel>Chat</PanelLabel>
             <ChatPanel
               onSend={onSend}
+              messages={messages}
               loading={loading}
               error={error}
               onClearError={onClearError}
