@@ -1,5 +1,13 @@
 import { useState } from 'react'
 
+const SKILLS = [
+  'Improve writing',
+  'Make it shorter',
+  'Fix grammar',
+  'Change tone to formal',
+  'Add a conclusion',
+]
+
 export function ChatPanel({ onSend, loading, error, disabled }) {
   const [input, setInput] = useState('')
   const isDisabled = loading || disabled
@@ -30,6 +38,20 @@ export function ChatPanel({ onSend, loading, error, disabled }) {
         ) : (
           <p className="text-gray-600">Send an instruction to edit your document.</p>
         )}
+      </div>
+
+      {/* Skill buttons */}
+      <div className="shrink-0 flex flex-wrap gap-1.5 px-3 py-2 border-t border-gray-800">
+        {SKILLS.map(skill => (
+          <button
+            key={skill}
+            onClick={() => onSend(skill)}
+            disabled={isDisabled}
+            className="px-2.5 py-1 text-xs rounded-full bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            {skill}
+          </button>
+        ))}
       </div>
 
       <form onSubmit={handleSubmit} className="shrink-0 flex gap-2 p-3 border-t border-gray-800">
