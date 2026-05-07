@@ -54,8 +54,10 @@ export async function sendMessage(messages, instruction) {
     }
 
     const data = await response.json()
+    const choice = data.choices?.[0]
+    if (!choice) throw new Error('No response from model. Please try again.')
     return {
-      content: data.choices[0].message.content,
+      content: choice.message.content,
       usage: data.usage ?? null,
       model,
     }

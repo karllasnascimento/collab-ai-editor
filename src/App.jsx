@@ -8,7 +8,7 @@ export default function App() {
 
   async function handleSend(instruction) {
     const result = await send(instruction, content)
-    if (result) setProposal(result)
+    if (result !== null) setProposal(result)
   }
 
   return (
